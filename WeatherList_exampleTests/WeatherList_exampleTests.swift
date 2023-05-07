@@ -40,6 +40,32 @@ final class WeatherList_exampleTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    
+    func testapi_seoul() {
+        
+        let request = URLRequest(url: URL(string: API.SEOUL)!)
+        let response = URLSession.shared.rx.response(request: request)
+        response
+            .map { response, data in
+                // Use the `data` part of the tuple here
+                String(data: data, encoding: .utf8)!
+            }
+            .subscribe(onNext:  { res in
+                do {
+                    let jsonString = res
+                    let jsonData = jsonString.data(using: .utf8)!
+                    let decoder = JSONDecoder()
+                    let weatherResponse = try decoder.decode(WeatherResponse.self, from: jsonData)
+                }catch {
+                    XCTFail("Error: \(error)")
+                }
+                
+            }, onError: { error in
+                XCTFail("\(error.localizedDescription)")
+            })
+            .disposed(by: DisposeBag())
+    }
 
     func testExample() throws {
         
@@ -63,8 +89,6 @@ final class WeatherList_exampleTests: XCTestCase {
         XCTAssertRecordedElements(isGetSeoulList.events, [WeatherResponse]())
         XCTAssertRecordedElements(isGetlondonlList.events, [WeatherResponse]())
         XCTAssertRecordedElements(isGetChicagoList.events, [WeatherResponse]())
-        
-        
     }
 
     func testPerformanceExample() throws {
