@@ -26,15 +26,16 @@ final class WeatherViewModel : WeatherListViewModelType {
     
     
     var totalList = BehaviorRelay(value: [WeatherSelection]())
+  
     
-
     let disposeBag = DisposeBag()
 
     init() {
        
         
     }
-    
+   
+    /// 서울 날씨정보 받기 (16개 5일치)
     func getSeoulWeather() {
         
         let request = URLRequest(url: URL(string: API.SEOUL)!)
@@ -61,6 +62,7 @@ final class WeatherViewModel : WeatherListViewModelType {
             .disposed(by: disposeBag)
     }
     
+    ///런던 날씨정보 받기 (16개 5일치)
     func getLonDonWeather() {
         
         let request = URLRequest(url: URL(string: API.LONDON)!)
@@ -87,7 +89,7 @@ final class WeatherViewModel : WeatherListViewModelType {
             })
             .disposed(by: disposeBag)
     }
-    
+    //
     func getCicagoWeather() {
         
         let request = URLRequest(url: URL(string: API.CHICAGO)!)
@@ -114,6 +116,8 @@ final class WeatherViewModel : WeatherListViewModelType {
             .disposed(by: disposeBag)
     }
     
+    
+    /// 받은데이터 변환
     func fetchListData () {
         
         Observable.combineLatest(SeoulList, LondonList, ChicagoList)

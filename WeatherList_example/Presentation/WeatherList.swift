@@ -14,6 +14,9 @@ import RxDataSources
 /// <#Description#>
 class WeatherList : UIViewController, UITableViewDelegate {
   
+    
+    @IBOutlet weak var SubView: UIView!
+    
     private var viewModel = WeatherViewModel()
     
     private let disposeBag = DisposeBag()
@@ -33,7 +36,7 @@ class WeatherList : UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.view.addSubview(tableView)
+        self.SubView.addSubview(tableView)
         
         
         viewModel.getSeoulWeather()
@@ -66,11 +69,16 @@ class WeatherList : UIViewController, UITableViewDelegate {
                              
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "MM-dd"
+                        
+                        let dateFormatter_week = DateFormatter()
+                        dateFormatter_week.dateFormat = "EEEE"
+                        
                         let timestamp = item.dt
                         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
                         let weatherDay = dateFormatter.string(from: date)
+                        let weekday = dateFormatter_week.string(from: date)
                       
-                        cell.titleDay.text = weatherDay
+                        cell.titleDay.text = weekday + "(\(weatherDay))"
             
                         let tempMin = item.main.tempMin - 273.15
                         let tempMax = item.main.tempMax - 273.15
@@ -90,8 +98,6 @@ class WeatherList : UIViewController, UITableViewDelegate {
                 )
             ))
             .disposed(by: disposeBag) // Dispose the subscription when the view controller is deallocated
-        
-
     }
 
 }

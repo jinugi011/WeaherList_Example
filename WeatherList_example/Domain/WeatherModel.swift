@@ -98,9 +98,12 @@ struct Coordinates: Codable {
 }
 
 
-//struct MyModel {
-//    var weather : Weather
-//}
+
+extension WeatherResponse: Equatable {
+    static func == (lhs: WeatherResponse, rhs: WeatherResponse) -> Bool {
+        return false
+    }
+}
 
 extension Weather: IdentifiableType,Equatable {
     static func == (lhs: Weather, rhs: Weather) -> Bool {

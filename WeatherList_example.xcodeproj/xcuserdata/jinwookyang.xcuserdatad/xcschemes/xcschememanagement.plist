@@ -6,8 +6,23 @@
 	<dict>
 		<key>WeatherList_example.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
-			<integer>9</integer>
+			<integer>11</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>3044E9DA2A03F2BE0014D99C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3044EA132A0778980014D99C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

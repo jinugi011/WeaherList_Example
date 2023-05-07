@@ -5,10 +5,34 @@
 //  Created by Jin Wook Yang on 2023/05/07.
 //
 
+import RxSwift
+import RxTest
 import XCTest
+
+@testable import WeatherList_example
 
 final class WeatherList_exampleTests: XCTestCase {
 
+    
+    var viewModel: WeatherViewModel!
+    var scheduler: ConcurrentDispatchQueueScheduler!
+    var disposeBag: DisposeBag!
+    var testScheduler: TestScheduler!
+    
+    
+    override func setUp() async throws {
+     
+        viewModel = WeatherViewModel()
+        scheduler = ConcurrentDispatchQueueScheduler(qos: .default)
+        testScheduler = TestScheduler(initialClock: 0)
+    }
+    
+    override func tearDown() {
+        viewModel = nil
+        super.tearDown()
+    }
+    
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -18,17 +42,34 @@ final class WeatherList_exampleTests: XCTestCase {
     }
 
     func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        
+        let isGetSeoulList = testScheduler.createObserver(WeatherResponse.self)
+        let isGetlondonlList = testScheduler.createObserver(WeatherResponse.self)
+        let isGetChicagoList = testScheduler.createObserver(WeatherResponse.self)
+        
+        viewModel.SeoulList
+            .bind(to: isGetSeoulList)
+            .disposed(by: DisposeBag())
+        
+        viewModel.LondonList
+            .bind(to: isGetlondonlList)
+            .disposed(by: DisposeBag())
+        
+        viewModel.ChicagoList
+            .bind(to: isGetChicagoList)
+            .disposed(by: DisposeBag())
+        
+        
+        XCTAssertRecordedElements(isGetSeoulList.events, [WeatherResponse]())
+        XCTAssertRecordedElements(isGetlondonlList.events, [WeatherResponse]())
+        XCTAssertRecordedElements(isGetChicagoList.events, [WeatherResponse]())
+        
+        
     }
 
     func testPerformanceExample() throws {
-        // This is an example of a performance test case.
         measure {
-            // Put the code you want to measure the time of here.
+            
         }
     }
 
